@@ -48,6 +48,46 @@ public class EmployeeControllerTest {
 
         this.mockMvc.perform(get("/employees")).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1));
-    }
+    @Test
+    public void testUpdateEmployeeById() throws Exception {
+        // Create a new employee
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setSalary(5000);
+        Employee createdEmployee = employeeService.save(employee);
 
+        // Update the employee's name
+        createdEmployee.setName("Jane Doe");
+
+        // Send a PUT request to update the employee
+        mockMvc.perform(put("/employee/" + createdEmployee.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createdEmployee)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Jane Doe")))
+                .andExpect(jsonPath("$.salary", is(5000)))
+                .andReturn();
+    }
+}
+
+@Test
+    public void testUpdateEmployeeById() throws Exception {
+        // Create a new employee
+        Employee employee = new Employee();
+        employee.setName("John Doe");
+        employee.setSalary(5000);
+        Employee createdEmployee = employeeService.save(employee);
+
+        // Update the employee's name
+        createdEmployee.setName("Jane Doe");
+
+        // Send a PUT request to update the employee
+        mockMvc.perform(put("/employee/" + createdEmployee.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createdEmployee)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is("Jane Doe")))
+                .andExpect(jsonPath("$.salary", is(5000)))
+                .andReturn();
+    }
 }
